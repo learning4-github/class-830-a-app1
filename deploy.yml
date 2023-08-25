@@ -1,0 +1,21 @@
+---
+- name: deploy play-book for angular app
+  hosts: all
+  become: yes
+  tasks:
+    - name: install the httpd server software
+      yum:
+        name: httpd
+        state: latest
+    - name: start the httpd server 
+      service:
+        name: httpd
+        state: started
+    - name: copy the build ford to deploy
+      copy:
+        src: /var/lib/jenkins/workspace/angular-test-pip/dist/angular-class8/
+        dest: /var/www/html/
+    - name: restart the web server soft
+      service:
+        name: httpd
+        state: restarted
