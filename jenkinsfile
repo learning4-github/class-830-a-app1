@@ -1,1 +1,29 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('SCM') {
+            steps {
+                git 'https://github.com/jilu407/class-830-a-app.git'
+            }
+        }
+        stage('Install') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('build') {
+            steps {
+                sh 'npm run build'
+                sh 'ls -la'
+                sh 'ls dist/'
+            }
+        }
+        stage('Deploy') {
+            steps {
+               ansiblePlaybook become: true, credentialsId: 'edf29c56-6626-4ce1-a40e-4d6a98e6afea', disableHostKeyChecking: true, inventory: 'dev.inv', playbook: 'deploy.yml'
+            }
+        }
+    }
+}
 
